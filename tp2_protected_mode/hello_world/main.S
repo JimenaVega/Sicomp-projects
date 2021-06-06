@@ -1,8 +1,8 @@
 .code16
-    mov $msg, %si
+    mov $msg, %si 
     mov $0x0e, %ah
 loop:
-    lodsb
+    lodsb /*utiliza SI para saber donde empeiza la instruccion y se cargue msg en el reg AL*/
     or %al, %al
     jz halt
     int $0x10

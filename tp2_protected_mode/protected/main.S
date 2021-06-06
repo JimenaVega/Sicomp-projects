@@ -37,18 +37,20 @@ gdt_descriptor:
     .word gdt_end - gdt_start /*Tamanio del GDT descriptor*/
     .long gdt_start           /*Limite*/
 vga_current_line:
-    .long 0
+    .long 2
 
 .code32
 protected_mode:
+   
     /*Se actualiza la Descriptor Cache */
     mov $DATA_SEG, %ax
     mov %ax, %ds
     mov %ax, %es
     mov %ax, %fs
     mov %ax, %gs
+    /*Excepcion*/
     mov %ax, %ss
-    /*Direcion de pila, el esp apunta a 0x700*/
+    /*Direcion de pila, el esp apunta a 0x7000*/
     mov $0X7000, %ebp
     mov %ebp, %esp
 
@@ -73,8 +75,8 @@ loop:
     je end
     mov %ax, (%edx)
     add $1, %ecx
-    /*movb $100, DATA_SEG*//*Excepcion*/
-    mov $DATA_SEG, %ax
+    
+    /*mov $DATA_SEG, %ax*/
     add $2, %edx
     jmp loop
 end:

@@ -1,0 +1,13 @@
+#Crear una imagen con un HALT
+
+printf '\364%509s\125\252' > mainhalt.img
+
+#Si quiero ver el codigo de una instruccion:
+
+echo hlt > a.S
+as -o a.o a.S
+objdump -S a.o
+
+#Correr la iamgen en qemu:
+
+qemu-system-x86_64 --drive file=mainhalt.img,format=raw,index=0,media=disk
