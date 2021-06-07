@@ -32,7 +32,7 @@ static int __init drv2_init(void) /* Constructor */
 {
     int ret;
 
-    printk(KERN_INFO "SdeC: drv2 Registrado exitosamente..!!");
+    printk(KERN_INFO "SdeC: drv2 AGHHHHHHHHHHHHHHHHHHHH Registrado exitosamente..!!");
 
     // alloc_chrdev_region calcula (¿ obtiene ?) dinámicamente un MAJOR libre 
     // (lo devuelve en first) y registra 3 números de device MINOR a partir de
@@ -50,7 +50,7 @@ static int __init drv2_init(void) /* Constructor */
 static void __exit drv2_exit(void) /* Destructor */
 {
     unregister_chrdev_region(first, 3);
-    printk(KERN_INFO "SdeC_drv2: dice Adios mundo kernel..!!\n");
+    printk(KERN_INFO "SdeC_drv2: dice Adios mundoMATENME kernel..!!\n");
 }
 
 module_init(drv2_init);

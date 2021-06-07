@@ -18,7 +18,8 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/gpio.h>
-
+#include <linux/fs.h>
+#include <linux/init.h>
 /*
  * Struct defining pins, direction and inital state 
  */
@@ -35,7 +36,7 @@ static int __init gpiomod_init(void)
 {
 	int ret = 0;
 
-	printk(KERN_INFO "%s\n", __func__);
+	printk(KERN_INFO "IM HERE%s\n", __func__);
 
 	// register LED GPIOs, turn LEDs on
 	ret = gpio_request_array(leds, ARRAY_SIZE(leds));
@@ -54,7 +55,7 @@ static void __exit gpiomod_exit(void)
 {
 	int i;
 
-	printk(KERN_INFO "%s\n", __func__);
+	printk(KERN_INFO "ME SALI%s\n", __func__);
 
 	// turn all LEDs off
 	for(i = 0; i < ARRAY_SIZE(leds); i++) {

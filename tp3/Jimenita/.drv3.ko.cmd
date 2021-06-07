@@ -1,0 +1,1 @@
+cmd_/home/pi/Sicomp-projects/tp3/Jimenita/drv3.ko := ld -r  -EL  --build-id=sha1  -T scripts/module.lds -o /home/pi/Sicomp-projects/tp3/Jimenita/drv3.ko /home/pi/Sicomp-projects/tp3/Jimenita/drv3.o /home/pi/Sicomp-projects/tp3/Jimenita/drv3.mod.o;  true
