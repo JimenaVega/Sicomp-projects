@@ -14,9 +14,13 @@ int main(int argc, char *argv[]){
     memset(buf, 0, 100);
 
     printf("User enter this : %s\n", argv[1]);
-    int fp = open("/dev/gpio_rbp", O_RDWR);
+    int fp = open("/dev/test_read", O_RDWR);
 
     write(fp, argv[1], strlen(argv[1]));
+
+    read(fp, &buf[i], 1);
+
+    printf("Señal que llego = %s\n", buf);
 
     close(fp);
 }

@@ -11,7 +11,7 @@
 #include <linux/gpio.h>
 
 //Timer Variable
-#define TIMEOUT 5000    //milliseconds
+#define TIMEOUT 6000    //milliseconds
 #define LEN 128
 
 /* Define GPIOs for BUTTONS */
@@ -31,7 +31,7 @@ static struct class *cl; 	// Global variable for the device class
 static char msg[LEN];              // buffer en espacio de kernel
 
 static char c;
-
+int counter = 0;
 //Timer Callback function. This will be called when timer expires
 void timer_callback(struct timer_list * data)
 {
@@ -40,6 +40,15 @@ void timer_callback(struct timer_list * data)
     printk(KERN_INFO "JIMEtest_read: Current button0 value: %d\n", gpio_get_value(buttons[0].gpio));
     printk(KERN_INFO "JIMEtest_read: Current button1 value: %d\n", gpio_get_value(buttons[1].gpio));
     
+    //BORRAR
+    if(counter == 1){
+        counter = 0;
+         c = 'N';
+    }else{
+        counter = 1;
+        c = 'S';
+    }
+   
     /*
        Re-enable timer. Because this function will be called only first time. 
        If we re-enable this will work like periodic timer. 
@@ -64,7 +73,6 @@ static ssize_t test_read_read(struct file *f, char __user *buf, size_t len, loff
     
     //printk("Reading device: %d\n", MINOR(file->f_path.dentry->d_inode->i_rdev));
 
-
     if(*offset==0)
     {
         if (copy_to_user(buf, &c, 1)) {
@@ -81,8 +89,6 @@ static ssize_t test_read_read(struct file *f, char __user *buf, size_t len, loff
         return 0;
     }
 
-    
-
 }
 
 // my_write escribe "len" bytes en "buf" y devuelve la cantidad de bytes escrita, 
@@ -93,12 +99,6 @@ static ssize_t test_read_read(struct file *f, char __user *buf, size_t len, loff
 static ssize_t test_read_write(struct file *f, const char __user *buf, size_t len, loff_t *off)
 {
     printk(KERN_INFO "test_read: write()\n");
-
-    // if ( copy_from_user(&c, buf + len - 1, 1) != 0 )
-    //     return -EFAULT;
-    // else
-    //     return len;
-    c = 'X';
 
     if(copy_from_user(msg, buf, len) != 0)
    // if(copy_from_user(&c, buf, len) != 0)
@@ -151,11 +151,11 @@ static int __init test_read_init(void) /* Constructor */
         return ret;
     }
 
-    // /* setup your timer to call my_timer_callback */
-    // timer_setup(&etx_timer, timer_callback, 0);
+    /* setup your timer to call my_timer_callback */
+    timer_setup(&etx_timer, timer_callback, 0);
 
-    // /* setup timer interval to based on TIMEOUT Macro */
-    // mod_timer(&etx_timer, jiffies + msecs_to_jiffies(TIMEOUT));
+    /* setup timer interval to based on TIMEOUT Macro */
+    mod_timer(&etx_timer, jiffies + msecs_to_jiffies(TIMEOUT));
 
     // register BUTTON gpios
 	ret = gpio_request_array(buttons, ARRAY_SIZE(buttons));

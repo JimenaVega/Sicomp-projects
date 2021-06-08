@@ -67,25 +67,25 @@ static int gpio_rbp_close(struct inode *i, struct file *f)
     return 0;
 }
 
-static ssize_t gpio_rbp_read(struct file *f, char __user *buf, size_t len, loff_t *off)
+static ssize_t gpio_rbp_read(struct file *f, char __user *buf, size_t len, loff_t *offset)
 {
     printk(KERN_INFO "gpio_rbp: read()\n");
-    
 
-    if (*off == 0){
-
-        if (copy_to_user(buf, this_msg, strlen(this_msg)) != 0)
+    if(*offset==0)
+    {
+        if (copy_to_user(buf, &c, 1)) {
             return -EFAULT;
-        else{
-            (*off)++;
+        } else
+        {
+            printk("Data read by user: %c\n", c);
+            (*offset) ++;
             return 1;
         }
-    }
-    else{
-         return 0;
-    }
-    return 0;
 
+    } else 
+    {
+        return 0;
+    }
 }
 
 // my_write escribe "len" bytes en "buf" y devuelve la cantidad de bytes escrita, 
@@ -97,11 +97,9 @@ static ssize_t gpio_rbp_write(struct file *f, const char __user *buf, size_t len
 {
     printk(KERN_INFO "gpio_rbp: write()\n");
 
-    // if ( copy_from_user(&c, buf + len - 1, 1) != 0 )
-    //     return -EFAULT;
-    // else
-    //     return len;
-
+    //Borrar esta c
+    c = 'X';
+    
     if(copy_from_user(msg, buf, len) != 0)
         return -EFAULT;
     else
@@ -152,19 +150,21 @@ static int __init gpio_rbp_init(void) /* Constructor */
         return ret;
     }
 
-    /* setup your timer to call my_timer_callback */
-    timer_setup(&etx_timer, timer_callback, 0);
-
-    /* setup timer interval to based on TIMEOUT Macro */
-    mod_timer(&etx_timer, jiffies + msecs_to_jiffies(TIMEOUT));
-
-    // register BUTTON gpios
+        // register BUTTON gpios
 	ret = gpio_request_array(buttons, ARRAY_SIZE(buttons));
 
 	if (ret) {
 		printk(KERN_ERR "Unable to request GPIOs for BUTTONs: %d\n", ret);
 		return ret;
 	}
+
+    /* setup your timer to call my_timer_callback */
+    timer_setup(&etx_timer, timer_callback, 0);
+
+    /* setup timer interval to based on TIMEOUT Macro */
+    mod_timer(&etx_timer, jiffies + msecs_to_jiffies(TIMEOUT));
+
+
 
     return 0;
 }
