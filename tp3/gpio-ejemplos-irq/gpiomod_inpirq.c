@@ -27,7 +27,7 @@ static struct gpio leds[] = {
 
 /* Define GPIOs for BUTTONS */
 static struct gpio buttons[] = {
-		{ 17, GPIOF_IN, "BUTTON 1" },	// turns LED on
+		{ 8, GPIOF_IN, "BUTTON 1" },	// turns LED on
 		{ 18, GPIOF_IN, "BUTTON 2" },	// turns LED off
 };
 
@@ -45,6 +45,8 @@ static irqreturn_t button_isr(int irq, void *data)
 	else if(irq == button_irqs[1] && gpio_get_value(leds[0].gpio)) {
 			gpio_set_value(leds[0].gpio, 0);
 	}
+
+	printk(KERN_INFO "Boton apretado bro\n");
 
 	return IRQ_HANDLED;
 }

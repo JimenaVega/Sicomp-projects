@@ -1,6 +1,5 @@
 CC=gcc
 CFLAGS= -g -Wall -pedantic -Wextra -Wconversion -std=gnu11 #-Werror
-
 obj-m += gpio_rbp.o
 
 all:
