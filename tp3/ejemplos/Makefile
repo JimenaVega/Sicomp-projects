@@ -1,4 +1,4 @@
-obj-m += mimodulo2.o
+obj-m += test_read.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
