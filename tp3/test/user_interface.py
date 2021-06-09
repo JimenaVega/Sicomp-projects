@@ -11,11 +11,11 @@ DEVICE_FILE = "/dev/gpio_rbp"
 sensorName = ""
 yName = ""
 
-# def prompt():
-#     print("SEÑALES A MOSTRAR:")
-#     print("[0] Exit program")
-#     print("[1] Sensor de temperatura")
-#     print("[2] Fotosensor")
+def prompt():
+    print("SEÑALES A MOSTRAR:")
+    print("[0] Exit program")
+    print("[1] Sensor de temperatura")
+    print("[2] Fotosensor")
 
 
 # def animationFrame(i):
@@ -34,11 +34,11 @@ yName = ""
 
 # r = 0
 
-# while(1):
+while(1):
 
-#     r = 0
-#     prompt()
-#     signal = input("Ingrese el numero señal a graficar\n>>")
+    prompt()
+    signal = input("Ingrese el numero señal a graficar\n>>")
+    fd = open(DEVICE_FILE, "w")
 
     # if(signal == "0"):
     #     break
@@ -47,10 +47,8 @@ yName = ""
 
         # sensorName = "Señal 1"
         # yName = "luz"
-signal = "1"
-fd = open(DEVICE_FILE, "w")
-fd.write(signal)
-fd.close()
+    fd.write(signal)
+    fd.close()
 
 
 
@@ -59,24 +57,19 @@ fd.close()
 
     #     sensorName = "Señal 2"
     #     yName = "Temperatura"
-
-    #     fd = open(DEVICE_FILE, "w")
-    #     fd.write(signal)
-    #     fd.close()
+        # fd.write(signal)
+        # fd.close()
 
     # else:
     #     print("Error. Señal inexistente.")
-    
 
-
-    # for i in range(100):
         
-time.sleep(1)
+    time.sleep(1)
 
-fd = open(DEVICE_FILE, "r")
-r = ord(fd.read(1))
-print("Lo leido es [{0}]".format(r))
-fd.close()
+    fd = open(DEVICE_FILE, "r")
+    r = ord(fd.read(1))
+    print("Lo leido es [{0}]".format(r))
+    fd.close()
 # animation = anim.FuncAnimation(fig, func=animation_frame, frames=np.arange(0,10))
     #animation = anim.FuncAnimation(fig, func=animationFrame, frames=100, interval=20)
     #plt.show()
