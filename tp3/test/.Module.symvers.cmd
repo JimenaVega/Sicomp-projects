@@ -1,1 +1,0 @@
-cmd_/home/pi/Sicomp-projects/tp3/test/Module.symvers := sed 's/ko$$/o/' /home/pi/Sicomp-projects/tp3/test/modules.order | scripts/mod/modpost -m -a   -o /home/pi/Sicomp-projects/tp3/test/Module.symvers -e -i Module.symvers   -T -

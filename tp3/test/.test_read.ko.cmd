@@ -1,1 +1,0 @@
-cmd_/home/pi/Sicomp-projects/tp3/test/test_read.ko := ld -r  -EL  --build-id=sha1  -T scripts/module.lds -o /home/pi/Sicomp-projects/tp3/test/test_read.ko /home/pi/Sicomp-projects/tp3/test/test_read.o /home/pi/Sicomp-projects/tp3/test/test_read.mod.o;  true
