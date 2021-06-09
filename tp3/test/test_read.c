@@ -98,7 +98,7 @@ static ssize_t test_read_read(struct file *f, char __user *buf, size_t len, loff
 
 static ssize_t test_read_write(struct file *f, const char __user *buf, size_t len, loff_t *off)
 {
-    printk(KERN_INFO "test_read: write()\n");
+    printk(KERN_INFO "test_read: write() GPIO[8] = %d\n", gpio_get_value(buttons[0].gpio));
 
     if(copy_from_user(msg, buf, len) != 0)
    // if(copy_from_user(&c, buf, len) != 0)
