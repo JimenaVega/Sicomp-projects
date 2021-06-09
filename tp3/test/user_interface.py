@@ -57,19 +57,6 @@ while(1):
     fd.write(signal)
     fd.close()
 
-
-
-    # elif (signal == "2"):
-    #     print("Señal 2")
-
-    #     sensorName = "Señal 2"
-    #     yName = "Temperatura"
-        # fd.write(signal)
-        # fd.close()
-
-    # else:
-    #     print("Error. Señal inexistente.")
-
         
 
 

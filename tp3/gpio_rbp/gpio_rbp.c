@@ -86,26 +86,6 @@ static ssize_t gpio_rbp_read(struct file *f, char __user *buf, size_t len, loff_
     else{
         return 0;
     }
-    // if(*offset==0){
-    //     if(signal_flag){
-    //         ret = copy_to_user(buf, &channel0, 1);
-    //     }
-    //     else{
-    //         ret = copy_to_user(buf, &channel1, 1);
-    //     }
-
-    //     if(ret != 0){
-    //         return -EFAULT;
-    //     }
-    //     else{
-    //         printk("Data read by user: %c\n", c);
-    //         (*offset) ++;
-    //         return 1;   
-    //     }
-    // }
-    // else{
-    //     return 0;
-    // }
 }
 
 // my_write escribe "len" bytes en "buf" y devuelve la cantidad de bytes escrita, 
@@ -114,7 +94,7 @@ static ssize_t gpio_rbp_read(struct file *f, char __user *buf, size_t len, loff_
 // Cuando hago un $ echo "bla bla bla..." > /dev/SdeC_drv3, se convoca a my_write.!!
 
 static ssize_t gpio_rbp_write(struct file *f, const char __user *buf, size_t len, loff_t *off){
-    printk(KERN_INFO "HEREgpio_rbp: write()\n");
+    printk(KERN_INFO "gpio_rbp: write()\n");
     
     if(copy_from_user(msg, buf, len) != 0)
         return -EFAULT;

@@ -18,6 +18,7 @@ with open('data.csv', 'w') as csv_file:
 while True:
 
     with open('data.csv', 'a') as csv_file:
+        
         csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
         info = {
@@ -27,14 +28,11 @@ while True:
 
         csv_writer.writerow(info)
         print(x_value, total_1)
-
-
         fd = open(DEVICE_FILE, "r")
-        r = ord(fd.read(1))
-        #print("Lo leido es [{0}]".format(r))
+        r = (ord(fd.read(1)) - 48)
         fd.close()
 
         x_value += 1
         total_1 = r
 
-    time.sleep(1)
+    time.sleep(0.2)
