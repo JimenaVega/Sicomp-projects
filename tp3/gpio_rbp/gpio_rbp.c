@@ -18,6 +18,11 @@
 static struct gpio buttons[] = {
 		{ 21, GPIOF_IN, "BUTTON 1" },
         { 20, GPIOF_IN, "BUTTON 1" },
+        { 14, GPIOF_IN, "DS_0" },
+        { 18, GPIOF_IN, "DS_1" },
+        { 23, GPIOF_IN, "DS_2" },
+        { 24, GPIOF_IN, "DS_3" },
+        { 25, GPIOF_IN, "DS_4" },
 };
 
 //Timer
@@ -30,7 +35,7 @@ static struct class *cl; 	// Global variable for the device class
 
 static char msg[LEN];              // buffer en espacio de kernel
 static char channel0, channel1;
-int ret, signal_flag = 0;
+int ret, ds_value = 0,signal_flag = 0;
 uint8_t c;
 int counter = 0;
 
@@ -40,13 +45,23 @@ void timer_callback(struct timer_list * data){
     printk(KERN_INFO "gpio_rbp: Timer Interrupt [%d]", count++);
     printk(KERN_INFO "gpio_rbp: Current button0 value: %d\n", gpio_get_value(buttons[0].gpio));
     printk(KERN_INFO "gpio_rbp: Current button1 value: %d\n", gpio_get_value(buttons[1].gpio));
+    printk(KERN_INFO "gpio_rbp: Current DS_0 value: %d\n", gpio_get_value(buttons[2].gpio));
+    printk(KERN_INFO "gpio_rbp: Current DS_1 value: %d\n", gpio_get_value(buttons[3].gpio));
+    printk(KERN_INFO "gpio_rbp: Current DS_2 value: %d\n", gpio_get_value(buttons[4].gpio));
+    printk(KERN_INFO "gpio_rbp: Current DS_3 value: %d\n", gpio_get_value(buttons[5].gpio));
+    printk(KERN_INFO "gpio_rbp: Current DS_4 value: %d\n", gpio_get_value(buttons[6].gpio));
+
+    ds_value = gpio_get_value(buttons[2].gpio)*16 + gpio_get_value(buttons[3].gpio)*8 + gpio_get_value(buttons[4].gpio)*4 + gpio_get_value(buttons[5].gpio)*2 + gpio_get_value(buttons[6].gpio);
+
+    printk(KERN_INFO "gpio_rbp: Current DS value: %d\n", ds_value);
 
     channel0 = (uint8_t)gpio_get_value(buttons[0].gpio);
     channel1 = (uint8_t)gpio_get_value(buttons[1].gpio);
 
        //BORRAR
     if(signal_flag){
-        c = (char)gpio_get_value(buttons[0].gpio) + '0';
+        // c = (char)gpio_get_value(buttons[0].gpio) + '0';
+        c = ds_value + '0';
     }else{
         counter = 1;
         c = (char)gpio_get_value(buttons[1].gpio) + '0';
