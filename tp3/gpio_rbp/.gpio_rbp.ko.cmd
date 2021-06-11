@@ -1,1 +1,0 @@
-cmd_/home/pi/Sicomp-projects/tp3/gpio_rbp/gpio_rbp.ko := ld -r  -EL  --build-id=sha1  -T scripts/module.lds -o /home/pi/Sicomp-projects/tp3/gpio_rbp/gpio_rbp.ko /home/pi/Sicomp-projects/tp3/gpio_rbp/gpio_rbp.o /home/pi/Sicomp-projects/tp3/gpio_rbp/gpio_rbp.mod.o;  true
