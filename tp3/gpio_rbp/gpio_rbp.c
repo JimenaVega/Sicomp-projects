@@ -9,6 +9,7 @@
 #include <linux/uaccess.h>
 #include <linux/timer.h>
 #include <linux/gpio.h>
+#include <linux/interrupt.h>
 
 //Timer Variable
 #define TIMEOUT 1000    //milliseconds
@@ -25,6 +26,9 @@ static struct gpio buttons[] = {
         { 25, GPIOF_IN, "DS_4" },
 };
 
+/* Later on, the assigned IRQ numbers for the buttons are stored here */
+static int button_irqs[] = { -1};
+
 //Timer
 static struct timer_list etx_timer;
 static unsigned int count = 0;
@@ -35,9 +39,33 @@ static struct class *cl; 	// Global variable for the device class
 
 static char msg[LEN];              // buffer en espacio de kernel
 static char channel0, channel1;
-int ret, ds_value = 0,signal_flag = 0;
+int ret, factor = 1, ds_value = 0,signal_flag = 0;
 uint8_t c;
 int counter = 0;
+
+/*
+ * The interrupt service routine called on button presses
+ */
+static irqreturn_t button_isr(int irq, void *data)
+{
+	if(irq == button_irqs[0]){
+        switch(factor){
+        
+        case 1:
+            factor = 2;
+            break;
+        case 2:
+            factor = 1;
+            break;
+        default:
+            break;
+        }
+    }
+
+	printk(KERN_INFO "gpio_rbp: factor: %d\n", factor);
+
+	return IRQ_HANDLED;
+}
 
 //Timer Callback function. This will be called when timer expires
 void timer_callback(struct timer_list * data){
@@ -61,10 +89,10 @@ void timer_callback(struct timer_list * data){
        //BORRAR
     if(signal_flag){
         // c = (char)gpio_get_value(buttons[0].gpio) + '0';
-        c = ds_value + '0';
+        c = ds_value*factor + '0';
     }else{
         counter = 1;
-        c = (char)gpio_get_value(buttons[1].gpio) + '0';
+        c = (char)gpio_get_value(buttons[1].gpio)*factor + '0';
     }
     
     /*
@@ -181,6 +209,24 @@ static int __init gpio_rbp_init(void) /* Constructor */{
 		return ret;
 	}
 
+    ret = gpio_to_irq(buttons[0].gpio);
+
+	if(ret < 0) {
+		printk(KERN_ERR "Unable to request IRQ: %d\n", ret);
+		return ret;
+	}
+
+	button_irqs[0] = ret;
+
+	printk(KERN_INFO "Successfully requested BUTTON1 IRQ # %d\n", button_irqs[0]);
+
+    ret = request_irq(button_irqs[0], button_isr, IRQF_TRIGGER_RISING /* | IRQF_DISABLED */, "gpiomod#button1", NULL);
+
+	if(ret) {
+		printk(KERN_ERR "Unable to request IRQ: %d\n", ret);
+		return ret;
+	}
+
     /* setup your timer to call my_timer_callback */
     timer_setup(&etx_timer, timer_callback, 0);
 
@@ -191,6 +237,8 @@ static int __init gpio_rbp_init(void) /* Constructor */{
 }
 
 static void __exit gpio_rbp_exit(void){ /* Destructor */
+    // free irqs
+	free_irq(button_irqs[0], NULL);
     gpio_free_array(buttons, ARRAY_SIZE(buttons));
     del_timer(&etx_timer);
     cdev_del(&c_dev);
